@@ -3,5 +3,5 @@
 Will continue this kata, using TDD and typescript, in the future.
 
 
-###TODO
+### TODO
 - adding a package-json file with all the testing tools
