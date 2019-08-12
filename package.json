@@ -1,0 +1,22 @@
+{
+  "name": "dojo-20190805-farkle-typescript-master",
+  "version": "1.0.0",
+  "description": "a DOJO made with Sam, Pierre and A**",
+  "main": "index.js",
+  "dependencies": {
+    "@types/chai": "^4.1.7",
+    "typescript": "^3.5.3"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0",
+    "ts-node": "^8.3.0",
+    "typings": "^2.1.1"
+  },
+  "scripts": {
+    "test": "mocha --watch -r ts-node/register farkle_tests.ts"
+  },
+  "author": "",
+  "license": "ISC"
+}
