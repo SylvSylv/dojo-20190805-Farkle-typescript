@@ -2,11 +2,7 @@
 
 Will continue this kata in the future, using TDD and typescript.
 
-- A diff
-- Another diff
-
 ### TODO
+- using git in VS-CODE to commit the changes to github.
 - adding a package-json file with all the testing tools
 
-
-This change was made via the github editor.
