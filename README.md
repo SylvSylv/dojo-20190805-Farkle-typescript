@@ -1,6 +1,6 @@
 # dojo-20190805-Farkle-typescript
 
-Will continue this kata, using TDD and typescript, in the future.
+Will continue this kata in the future, using TDD and typescript.
 
 
 ### TODO
