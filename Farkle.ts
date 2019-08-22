@@ -3,9 +3,14 @@
  */
 
 class Farkle {
-    score(roll:number[]):number {
-        let score:number = 0
+    private score: number
 
+
+    constructor() {
+        this.score = 0
+    }
+
+    getScoreForRoll(roll:number[]):number {
         // we must treat the most dice first
         const rules = [
             this.quadruple1s,
@@ -19,12 +24,12 @@ class Farkle {
             this.single5
         ]
         for (const rule of rules){
-            if (score == 0) {
-                score = rule(roll)
+            if (this.score == 0) {
+                this.score = rule.call(this, roll)
             }
         }
 
-        return score
+        return this.score
     }
 
     private single1(roll:number[]) {
@@ -42,24 +47,32 @@ class Farkle {
     }
 
     private triple1s(roll:number[]) {
-        return multiple(1, 1000, roll)
+        return this.getScoreForGivenTriplet(1, 1000, roll)
+    }
+
+    private getScoreForGivenTriplet(tripletOfType: number, scoreForTriplet: number, roll: number[]) {
+        const rollObj = this.countDieTypesOf(roll)
+        if (rollObj["die"+tripletOfType] === 3) {
+            return scoreForTriplet
+        }
+        return 0
     }
 
     private triple2s(roll:number[]) {
-        return multiple(2, 200, roll)
+        return this.getScoreForGivenTriplet(2, 200, roll)
     }
 
     private triple3s(roll:number[]) {
-        return multiple(3, 300, roll)
+        return this.getScoreForGivenTriplet(3, 300, roll)
     }
     private triple4s(roll:number[]) {
-        return multiple(4, 400, roll)
+        return this.getScoreForGivenTriplet(4, 400, roll)
     }
     private triple5s(roll:number[]) {
-        return multiple(5, 500, roll)
+        return this.getScoreForGivenTriplet(5, 500, roll)
     }
     private triple6s(roll:number[]) {
-        return multiple(6, 600, roll)
+        return this.getScoreForGivenTriplet(6, 600, roll)
     }
 
     private quadruple1s(roll:number[]) {
@@ -69,7 +82,7 @@ class Farkle {
         return multiple(1, 2000, roll)
     }
 
-    public countDieTypes(roll:number[]) {
+    public countDieTypesOf(roll:number[]) {
         const dieTypesObj = {
             // die1: 0,
             // die2: 0,

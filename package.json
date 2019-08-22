@@ -16,7 +16,6 @@
     "ts-node": "^8.3.0",
     "typings": "^2.1.1"
   },
-
   "scripts": {
     "test": "mocha -r ts-node/register farkle_tests.ts --watch-extensions ts --watch"
   },

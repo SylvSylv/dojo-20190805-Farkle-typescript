@@ -8,6 +8,5 @@ Will continue this kata in the future, using TDD and typescript.
 
 
 Scores for rolls can be found here :
-
 https://github.com/jesuswasrasta/KataFarkle
 
