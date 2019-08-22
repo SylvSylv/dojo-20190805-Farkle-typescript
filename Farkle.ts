@@ -1,6 +1,11 @@
+/**
+ * The classic dice game Farkle.
+ */
+
 class Farkle {
     score(roll:number[]):number {
-        let result:number = 0
+        let score:number = 0
+
         // we must treat the most dice first
         const rules = [
             this.quadruple1s,
@@ -14,12 +19,12 @@ class Farkle {
             this.single5
         ]
         for (const rule of rules){
-            if (result == 0) {
-                result = rule(roll)
+            if (score == 0) {
+                score = rule(roll)
             }
         }
 
-        return result
+        return score
     }
 
     private single1(roll:number[]) {
@@ -78,26 +83,29 @@ class Farkle {
             dieTypesObj["die"+dieValue] = dieTypesObj["die"+dieValue] || 0
             dieTypesObj["die"+dieValue] ++
         }
-
-        console.log(dieTypesObj)
         return dieTypesObj
     }
 }
 
 /**
- * Handles a roll a multiple dice.
+ * Matches the dice of a roll against a value.
+ * If every die of the roll is of the given value, returns the score.
+ * Otherwise returns 0.
  * TODO : handle multiple dice of the same value, but with extra dice with other values.
  */
-function multiple(value:number, score:number, roll:number[]) {
+function multiple(verifiedValue:number, score:number, roll:number[]) {
     if ( roll.length < 3 ) {
         return 0
     }
+
     const diceAllEqualVerifiedValue = roll.reduce( (acc, die) => {
-        return acc && (die === value)
+        return acc && (die === verifiedValue)
     }, true)
+
     if (diceAllEqualVerifiedValue) {
         return score;
     }
+
     return 0
 }
 
