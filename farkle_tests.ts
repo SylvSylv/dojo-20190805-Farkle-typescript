@@ -75,6 +75,18 @@ describe("Roll with quatern", () => {
     it('should return 400 for a 2,2,2,2', () => {
         expect(farkle.getScoreForRoll([2,2,2,2])).to.equal(400)
     })
+    it('should return 600 for a 3,3,3,3', () => {
+        expect(farkle.getScoreForRoll([3,3,3,3])).to.equal(600)
+    })
+    it('should return 800 for a 4,4,4,4', () => {
+        expect(farkle.getScoreForRoll([4,4,4,4])).to.equal(800)
+    })
+    it('should return 1000 for a 5,5,5,5', () => {
+        expect(farkle.getScoreForRoll([5,5,5,5])).to.equal(1000)
+    })
+    it('should return 1200 for a 6,6,6,6', () => {
+        expect(farkle.getScoreForRoll([6,6,6,6])).to.equal(1200)
+    })
 
 })
 
