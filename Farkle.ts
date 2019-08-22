@@ -14,6 +14,7 @@ class Farkle {
         // we must treat the most dice first
         const rules = [
             this.quadruple1s,
+            this.quadruple2s,
             this.triple1s,
             this.triple2s,
             this.triple3s,
@@ -46,11 +47,7 @@ class Farkle {
         return 0;
     }
 
-    private triple1s(roll:number[]) {
-        return this.getScoreForGivenTriplet(1, 1000, roll)
-    }
-
-    private getScoreForGivenTriplet(tripletOfType: number, scoreForTriplet: number, roll: number[]) {
+    private checkForTripletAndGetScore(tripletOfType: number, scoreForTriplet: number, roll: number[]) {
         const rollObj = this.countDieTypesOf(roll)
         if (rollObj["die"+tripletOfType] === 3) {
             return scoreForTriplet
@@ -58,29 +55,40 @@ class Farkle {
         return 0
     }
 
-    private triple2s(roll:number[]) {
-        return this.getScoreForGivenTriplet(2, 200, roll)
+    private checkForQuaternAndGetScore(quaternOfType: number, scoreForQuatern: number, roll: number[]) {
+        const rollObj = this.countDieTypesOf(roll)
+        if (rollObj["die"+quaternOfType] === 4) {
+            return scoreForQuatern
+        }
+        return 0
     }
 
+    private triple1s(roll:number[]) {
+        return this.checkForTripletAndGetScore(1, 1000, roll)
+    }
+    private triple2s(roll:number[]) {
+        return this.checkForTripletAndGetScore(2, 200, roll)
+    }
     private triple3s(roll:number[]) {
-        return this.getScoreForGivenTriplet(3, 300, roll)
+        return this.checkForTripletAndGetScore(3, 300, roll)
     }
     private triple4s(roll:number[]) {
-        return this.getScoreForGivenTriplet(4, 400, roll)
+        return this.checkForTripletAndGetScore(4, 400, roll)
     }
     private triple5s(roll:number[]) {
-        return this.getScoreForGivenTriplet(5, 500, roll)
+        return this.checkForTripletAndGetScore(5, 500, roll)
     }
     private triple6s(roll:number[]) {
-        return this.getScoreForGivenTriplet(6, 600, roll)
+        return this.checkForTripletAndGetScore(6, 600, roll)
     }
 
     private quadruple1s(roll:number[]) {
-        if ( roll.length < 4 ) {
-            return 0
-        }
-        return multiple(1, 2000, roll)
+        return this.checkForQuaternAndGetScore(1, 2000, roll)
     }
+    private quadruple2s(roll:number[]) {
+        return this.checkForQuaternAndGetScore(2, 400, roll)
+    }
+    // TODO: all quaterns
 
     public countDieTypesOf(roll:number[]) {
         const dieTypesObj = {
