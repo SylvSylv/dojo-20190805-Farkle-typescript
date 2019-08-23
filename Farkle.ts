@@ -1,10 +1,12 @@
+type dieValue = 1|2|3|4|5|6
+type dieRoll = dieValue[]
+
 /**
  * The classic dice game Farkle.
  */
 
 class Farkle {
     private score: number
-
 
     private readonly dieValues = [1, 2, 3, 4, 5, 6];
 
@@ -15,75 +17,77 @@ class Farkle {
     getScoreForRoll(roll:number[]):number {
         // we must treat the most dice first
         const rules = [
+            this.fives,
             this.quaterns,
             this.triplets,
             this.single1,
             this.single5
         ]
         for (const rule of rules){
-            if (this.score == 0) {
-                this.score = rule.call(this, roll)
-            }
+            this.score += rule.call(this, roll)
         }
-
         return this.score
     }
 
-    private single1(roll:number[]) {
-        if (roll[0] == 1) {
-            return 100;
-        }
-        return 0;
+    private single1(roll:number[]): number {
+        const rollObj = this.countDieTypesOf(roll)
+        const { die1 } = rollObj
+        return (die1 && die1 < 3) ? die1 * 100 : 0
     }
 
     private single5(roll:number[]) {
-        if (roll[0] == 5) {
-            return 50;
-        }
-        return 0;
+        const rollObj = this.countDieTypesOf(roll)
+        const { die5 } = rollObj
+        return (die5 && die5 < 3) ? die5 * 50 : 0
     }
 
-    private checkForTripletAndGetScore(tripletOfType: number, roll: number[]) {
+    private _handlingMultiple(multipleOfAKind: number, targetMultiple: dieValue, roll: dieRoll) {
         const rollObj = this.countDieTypesOf(roll)
-        if (rollObj["die"+tripletOfType] === 3) {
-            return this.getScoreForTriplet(tripletOfType)
+        if (rollObj["die"+multipleOfAKind] === targetMultiple) {
+            return this.getScoreForMultiple(targetMultiple, multipleOfAKind)
         }
         return 0
     }
 
-    private checkForQuaternAndGetScore(quaternOfType: number, roll: number[]) {
-        const rollObj = this.countDieTypesOf(roll)
-        if (rollObj["die"+quaternOfType] === 4) {
-            return this.getScoreForQuatern(quaternOfType)
-        }
-        return 0
-    }
-
-    private triplets(roll: number[]) {
+    private checkRollByFunctionAndGetScore(roll, getScoreIfCombination: Function) {
+        // if for each die type, we check if there is a combinaison, and we return the score
         let localScore = 0
         for (let dieValue of this.dieValues) {
-            localScore += this.checkForTripletAndGetScore(dieValue, roll)    
+            localScore += getScoreIfCombination.call(this, dieValue, roll)    
         }
         return localScore
     }
 
-    private quaterns(roll: number[]) {
-        let localScore = 0
-        for (let dieValue of this.dieValues) {
-            localScore += this.checkForQuaternAndGetScore(dieValue, roll)    
+    getCheckFunctionForCombinaisonSize(combinaisonSize: dieValue): Function {
+        return function checkForCombinaisonAndGetScore(combinaisonType: number, roll: dieRoll) {
+            return this._handlingMultiple(combinaisonType, combinaisonSize, roll)
         }
-        return localScore
     }
 
-    private getScoreForTriplet(typeOfTriplet: number) {
-        return typeOfTriplet != 1 ? typeOfTriplet*100 : 1000
+    private triplets(roll: dieRoll) {
+        return this.checkRollByFunctionAndGetScore(roll, this.getCheckFunctionForCombinaisonSize(3))
     }
 
-    private getScoreForQuatern(typeOfQuatern) {
-        return this.getScoreForTriplet(typeOfQuatern)*2
+    private quaterns(roll: dieRoll) {
+        return this.checkRollByFunctionAndGetScore(roll, this.getCheckFunctionForCombinaisonSize(4))
     }
 
-    public countDieTypesOf(roll:number[]) {
+    private fives(roll: dieRoll) {
+        return this.checkRollByFunctionAndGetScore(roll, this.getCheckFunctionForCombinaisonSize(5))
+    }
+
+    getScoreForMultiple(targetMultiple: number, multipleOfAKind: number) {
+        switch (targetMultiple) {
+            case 3: // triplets
+                return multipleOfAKind != 1 ? multipleOfAKind*100 : 1000
+            case 4:
+                return this.getScoreForMultiple(3, multipleOfAKind)*2
+            case 5:
+                return this.getScoreForMultiple(3, multipleOfAKind)*3
+        }
+    }
+
+    public countDieTypesOf(roll:number[]): any {
         const dieTypesObj = {
             // die1: 0,
             // die2: 0,
@@ -99,28 +103,6 @@ class Farkle {
         }
         return dieTypesObj
     }
-}
-
-/**
- * Matches the dice of a roll against a value.
- * If every die of the roll is of the given value, returns the score.
- * Otherwise returns 0.
- * TODO : handle multiple dice of the same value, but with extra dice with other values.
- */
-function multiple(verifiedValue:number, score:number, roll:number[]) {
-    if ( roll.length < 3 ) {
-        return 0
-    }
-
-    const diceAllEqualVerifiedValue = roll.reduce( (acc, die) => {
-        return acc && (die === verifiedValue)
-    }, true)
-
-    if (diceAllEqualVerifiedValue) {
-        return score;
-    }
-
-    return 0
 }
 
 export { Farkle }

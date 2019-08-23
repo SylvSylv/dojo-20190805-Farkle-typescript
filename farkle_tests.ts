@@ -14,8 +14,14 @@ describe('Basic score', () => {
     it('should return 100 for a 1', () => {
         expect(farkle.getScoreForRoll([1])).to.equal(100)
     })
+    it('should return 200 for 1,1', () => {
+        expect(farkle.getScoreForRoll([1,1])).to.equal(200)
+    })
     it('should return 50 for a 5', () => {
         expect(farkle.getScoreForRoll([5])).to.equal(50)
+    })
+    it('should return 100 for 5,5', () => {
+        expect(farkle.getScoreForRoll([5,5])).to.equal(100)
     })
 })
 
@@ -62,10 +68,6 @@ describe("Roll with triplet", () => {
     it('should return 600 for a 6,6,6', () => {
         expect(farkle.getScoreForRoll([6,6,6])).to.equal(600)
     })
-
-    it('should handle extra die and return 400 for a 4,4,4,1', () => {
-        expect(farkle.getScoreForRoll([4,4,4,1])).to.equal(400)
-    })
 })
 
 describe("Roll with quatern", () => {
@@ -90,4 +92,45 @@ describe("Roll with quatern", () => {
 
 })
 
+describe("Roll with five", () => {
+    it("should return 3000 for five 1s", () => {
+        expect(farkle.getScoreForRoll([1,1,1,1,1])).to.equal(3000)
+    })
+    it("should return 600 for five 2s", () => {
+        expect(farkle.getScoreForRoll([2,2,2,2,2])).to.equal(600)
+    })
+    it("should return 900 for five 3s", () => {
+        expect(farkle.getScoreForRoll([3,3,3,3,3])).to.equal(900)
+    })
+    it("should return 1200 for five 4s", () => {
+        expect(farkle.getScoreForRoll([4,4,4,4,4])).to.equal(1200)
+    })
+    it("should return 1500 for five 5s", () => {
+        expect(farkle.getScoreForRoll([5,5,5,5,5])).to.equal(1500)
+    })
+    it("should return 1800 for five 6s", () => {
+        expect(farkle.getScoreForRoll([6,6,6,6,6])).to.equal(1800)
+    })
+})
+
+describe("Roll with extra 1 or 5", () =>{  
+    it('should handle extra die and return 400 for a 4,4,4,1', () => {
+        expect(farkle.getScoreForRoll([4,4,4,1])).to.equal(500)
+    })
+    it("The order of the die shouldn't matter, and return 400 for a 1,4,4,4", () => {
+        expect(farkle.getScoreForRoll([1,4,4,4])).to.equal(500)
+    })
+    it('should handle extra die and return 450 for a 4,4,4,5', () => {  
+        expect(farkle.getScoreForRoll([4,4,4,5])).to.equal(450)
+    })
+})
+
+describe("Roll with two combination", () => {
+    it("should return 500 for three 2s and three 3s", () => {
+        expect(farkle.getScoreForRoll([2,2,2,3,3,3])).to.equal(500)
+    })
+    it("should return 1100 for three 5s and three 6s", () => {
+        expect(farkle.getScoreForRoll([5,5,5,6,6,6])).to.equal(1100)
+    })
+})
 
