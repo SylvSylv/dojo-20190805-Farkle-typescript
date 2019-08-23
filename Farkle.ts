@@ -41,10 +41,10 @@ class Farkle {
         return (die5 && die5 < 3) ? die5 * 50 : 0
     }
 
-    private _handlingMultiple(multipleOfAKind: number, targetMultiple: dieValue, roll: dieRoll) {
+    private _handlingMultiple(combinationType: dieValue, combinationSize: number, roll: dieRoll) {
         const rollObj = this.countDieTypesOf(roll)
-        if (rollObj["die"+multipleOfAKind] === targetMultiple) {
-            return this.getScoreForMultiple(targetMultiple, multipleOfAKind)
+        if (rollObj["die"+combinationType] === combinationSize) {
+            return this.getScoreForMultiple(combinationSize, combinationType)
         }
         return 0
     }
